@@ -3,8 +3,8 @@
 use Test::More tests => 1;
 
 BEGIN {
-    use_ok( 'Catalyst::ActionRole::ExpiresHeader' ) || print "Bail out!
+    use_ok( 'Catalyst::ActionRole::NotCachableHeaders' ) || print "Bail out!
 ";
 }
 
-diag( "Testing Catalyst::ActionRole::ExpiresHeader $Catalyst::ActionRole::ExpiresHeader::VERSION, Perl $], $^X" );
+diag( "Testing Catalyst::ActionRole::NotCachableHeaders $Catalyst::ActionRole::NotCachableHeaders::VERSION, Perl $], $^X" );
