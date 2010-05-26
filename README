@@ -1,0 +1,58 @@
+Catalyst-ActionRole-NotCachableHeaders
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
+
+NAME
+    Catalyst::ActionRole::NotCachableHeaders - Set no cache headers for
+    actions
+
+SYNOPSIS
+        package MyApp::Controller::Foo;
+
+        BEGIN { extends 'Catalyst::Controller'; }
+
+        with 'Catalyst::TraitFor::Controller::ActionRole' => {
+            action_roles => ['NotCachableHeaders'],
+        };
+
+        sub dont_cache_me : Local NotCachable { ... }
+
+DESCRIPTION
+    Provides a ActionRole to set HTTP headers instructing proxies and
+    browsers to not cache the response.
+
+        Pragma: no-cache
+        Cache-Control: no-cache
+        Expires: Thu, 01 Jan 1970 00:00:00 GMT
+        Last-Modified: %current time%
+
+    Please note that if any of above headers were already set they will be
+    overwritten.
+
+AUTHOR
+    Alex J. G. Burzyński, "<ajgb at cpan.org>"
+
+BUGS
+    Please report any bugs or feature requests to
+    "bug-catalyst-actionrole-notcachableheaders at rt.cpan.org", or through
+    the web interface at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Catalyst-ActionRole-NotC
+    achableHeaders>. I will be notified, and then you'll automatically be
+    notified of progress on your bug as I make changes.
+
+LICENSE AND COPYRIGHT
+    Copyright 2010 Alex J. G. Burzyński.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of either: the GNU General Public License as published
+    by the Free Software Foundation; or the Artistic License.
+
+    See http://dev.perl.org/licenses/ for more information.
+
