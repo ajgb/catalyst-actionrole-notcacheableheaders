@@ -2,7 +2,6 @@ package Catalyst::ActionRole::NotCachableHeaders;
 
 use Moose::Role;
 use HTTP::Date qw(time2str);
-use namespace::autoclean;
 
 our $VERSION = '0.01';
 
@@ -62,12 +61,9 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-around 'execute' => sub {
-    my $orig = shift;
+after 'execute' => sub {
     my $self = shift;
     my ($controller, $c, @args) = @_;
-
-    my $action = $self->$orig($controller, $c, @args);
 
     if ( exists $c->action->attributes->{NotCachable} ) {
         $c->response->header( 
@@ -77,8 +73,6 @@ around 'execute' => sub {
             'Last-Modified' => time2str( time ),
         );
     }
-
-    return $action;
 };
 
 
