@@ -1,28 +1,41 @@
 package Catalyst::ActionRole::NotCachableHeaders;
+# ABSTRACT: Set no cache headers for actions
 
+use strict;
 use Moose::Role;
 use HTTP::Date qw(time2str);
 
-our $VERSION = '0.01';
+after 'execute' => sub {
+    my $self = shift;
+    my ($controller, $c, @args) = @_;
 
-=encoding utf8
+    if ( exists $c->action->attributes->{NotCachable} ) {
+        $c->response->header(
+            'Expires' =>  'Thu, 01 Jan 1970 00:00:00 GMT',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'no-cache',
+            'Last-Modified' => time2str( time ),
+        );
+    }
+};
 
-=head1 NAME
+no Moose::Role;
 
-Catalyst::ActionRole::NotCachableHeaders - Set no cache headers for actions   
+1; # End of Catalyst::ActionRole::NotCachableHeaders
 
 =head1 SYNOPSIS
 
     package MyApp::Controller::Foo;
+    use Moose;
+    use namespace::autoclean;
 
-    BEGIN { extends 'Catalyst::Controller'; }
+    BEGIN { extends 'Catalyst::Controller::ActionRole' }
 
-    with 'Catalyst::TraitFor::Controller::ActionRole' => {
-        action_roles => ['NotCachableHeaders'],
-    };
+    __PACKAGE__->config(
+        action_roles => [qw( NotCachableHeaders )],
+    );
 
     sub dont_cache_me : Local NotCachable { ... }
-
 
 =head1 DESCRIPTION
 
@@ -37,45 +50,10 @@ not cache the response.
 Please note that if any of above headers were already set they will be
 overwritten.
 
-=head1 AUTHOR
+=head1 SEE ALSO
 
-Alex J. G. Burzyński, C<< <ajgb at cpan.org> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-catalyst-actionrole-notcachableheaders at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Catalyst-ActionRole-NotCachableHeaders>. 
-I will be notified, and then you'll automatically be notified of progress
-on your bug as I make changes.
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2010 Alex J. G. Burzyński.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
+Take a look at L<Catalyst::ActionRole::ExpiresHeader> if you want to set the
+C<Expires> header only.
 
 =cut
-
-after 'execute' => sub {
-    my $self = shift;
-    my ($controller, $c, @args) = @_;
-
-    if ( exists $c->action->attributes->{NotCachable} ) {
-        $c->response->header( 
-            'Expires' =>  'Thu, 01 Jan 1970 00:00:00 GMT',
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'no-cache',
-            'Last-Modified' => time2str( time ),
-        );
-    }
-};
-
-
-no Moose::Role;
-1; # End of Catalyst::ActionRole::NotCachableHeaders
 

@@ -1,11 +1,13 @@
 package TestApp::Controller::NotCachableWithActionRoles;
 
 use Moose;
-BEGIN { extends 'Catalyst::Controller'; }
+use namespace::autoclean;
 
-with 'Catalyst::TraitFor::Controller::ActionRole' => {
-    action_roles => ['NotCachableHeaders']
-};
+BEGIN { extends 'Catalyst::Controller::ActionRole' }
+
+__PACKAGE__->config(
+    action_roles => [qw( NotCachableHeaders )]
+);
 
 sub dont_cache_me  : Local NotCachable {
     my ($self, $c) = @_;
@@ -20,7 +22,7 @@ sub no_notcachable  : Local {
 sub own_headers  : Local NotCachable {
     my ($self, $c) = @_;
 
-    $c->response->header( 
+    $c->response->header(
         'Expires' =>  'Wed, 26 May 2010 14:14:53 GMT',
         'Cache-Control' => 'public',
         'Last-Modified' => 'Wed, 26 May 2010 14:14:53 GMT',
