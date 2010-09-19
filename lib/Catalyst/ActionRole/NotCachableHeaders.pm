@@ -11,3 +11,17 @@ sub BUILD {
 
 no Moose::Role;
 1; # End of Catalyst::ActionRole::NotCachableHeaders
+
+__END__
+
+=pod
+
+=begin Pod::Coverage
+
+  BUILD
+
+=end Pod::Coverage
+
+=cut
+
+
