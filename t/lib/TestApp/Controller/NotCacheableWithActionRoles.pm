@@ -1,21 +1,25 @@
-package TestApp::Controller::NotCachableWithDoes;
+package TestApp::Controller::NotCacheableWithActionRoles;
 
 use Moose;
 use namespace::autoclean;
 
 BEGIN { extends 'Catalyst::Controller::ActionRole' }
 
-sub dont_cache_me  : Local Does('NotCachableHeaders') NotCachable {
+__PACKAGE__->config(
+    action_roles => [qw( NotCacheableHeaders )]
+);
+
+sub dont_cache_me  : Local NotCacheable {
     my ($self, $c) = @_;
     $c->res->body( join(":", $c->action->name ) );
 }
 
-sub no_notcachable  : Local {
+sub no_notcacheable  : Local {
     my ($self, $c) = @_;
     $c->res->body( join(":", $c->action->name) );
 }
 
-sub own_headers  : Local Does('NotCachableHeaders') NotCachable {
+sub own_headers  : Local NotCacheable {
     my ($self, $c) = @_;
 
     $c->response->header(

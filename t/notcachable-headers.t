@@ -8,8 +8,8 @@ use lib qw( t/lib );
 use Catalyst::Test 'TestApp';
 
 my @controllers = qw(
-    notcachablewithactionroles
-    notcachablewithdoes
+    notcacheablewithactionroles
+    notcacheablewithdoes
 );
 my $resp;
 
@@ -39,11 +39,11 @@ for my $controller ( @controllers ) {
     );
 
     #
-    $resp = request("/$controller/no_notcachable");
+    $resp = request("/$controller/no_notcacheable");
     ok($resp->is_success,
-        "request to /$controller/no_notcachable is succesful"
+        "request to /$controller/no_notcacheable is succesful"
     );
-    is($resp->content, join(':', qw( no_notcachable ) ),
+    is($resp->content, join(':', qw( no_notcacheable ) ),
         "...and content is correct"
     );
     ok( ! $resp->header($_),
